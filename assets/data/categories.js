@@ -6,7 +6,7 @@ export default {
       movies: [
         {
           id: "movie1",
-          poster: require("../movie_posters/movie1.jpeg"),
+          poster: require("../movie_posters/movie_1/movie1.jpeg"),
         },
         {
           id: "movie2",
@@ -48,7 +48,7 @@ export default {
         },
         {
           id: "movie1",
-          poster: require("../movie_posters/movie1.jpeg"),
+          poster: require("../movie_posters/movie_1/movie1.jpeg"),
         },
       ],
     },
@@ -74,7 +74,7 @@ export default {
         },
         {
           id: "movie1",
-          poster: require("../movie_posters/movie1.jpeg"),
+          poster: require("../movie_posters/movie_1/movie1.jpeg"),
         },
       ],
     },
@@ -100,7 +100,7 @@ export default {
         },
         {
           id: "movie1",
-          poster: require("../movie_posters/movie1.jpeg"),
+          poster: require("../movie_posters/movie_1/movie1.jpeg"),
         },
       ],
     },
@@ -126,7 +126,7 @@ export default {
         },
         {
           id: "movie1",
-          poster: require("../movie_posters/movie1.jpeg"),
+          poster: require("../movie_posters/movie_1/movie1.jpeg"),
         },
       ],
     },
