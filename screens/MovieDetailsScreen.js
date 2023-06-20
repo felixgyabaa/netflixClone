@@ -79,31 +79,7 @@ const MovieDetailsScreen = ({ navigation, route }) => {
             <MaterialIcons name="keyboard-arrow-down" size={24} color="white" />
           </View>
         </TouchableOpacity>
-        {/* <View
-          style={{
-            borderWidth: 2,
-            borderColor: "white",
-            padding: 8,
-            marginTop: 8,
-          }}
-        >
-          <Picker
-            selectedValue={selectedSeason}
-            mode="dropdown"
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedSeason(itemValue)
-            }
-            style={{ color: "white", backgroundColor: "white" }}
-          >
-            {seasons.map((seasonName) => (
-              <Picker.Item
-                label={seasonName.value}
-                value={seasonName.key}
-                key={seasonName.key}
-              />
-            ))}
-          </Picker>
-        </View> */}
+
         {/* Episode List */}
         {movieDetails.seasons.items[selectedSeason].episodes.items.map(
           (item) => (
