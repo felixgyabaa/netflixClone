@@ -2,11 +2,14 @@ import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const EpisodeRow = ({ episodeDetails }) => {
+const EpisodeRow = ({ episodeDetails, setSelectedEpisode, index }) => {
   return (
     <View>
       <View style={styles.episodeRow}>
-        <TouchableOpacity style={{ width: "30%", marginRight: 8 }}>
+        <TouchableOpacity
+          style={{ width: "30%", marginRight: 8 }}
+          onPress={() => setSelectedEpisode(index)}
+        >
           <Image style={styles.episodePoster} source={episodeDetails.poster} />
         </TouchableOpacity>
         <View style={{ justifyContent: "flex-start" }}>

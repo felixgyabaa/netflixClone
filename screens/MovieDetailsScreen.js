@@ -1,25 +1,22 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
   Button,
   SafeAreaView,
   StyleSheet,
-  Image,
-  FlatList,
   ScrollView,
   TouchableOpacity,
-  Modal,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import { SelectList } from "react-native-dropdown-select-list";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Video, ResizeMode } from "expo-av";
 import movies from "../assets/data/movie";
 import InfoSectionOne from "../components/movie_details_screen/InfoSectionOne";
 import ReactionButtons from "../components/movie_details_screen/ReactionButtons";
 import ActionButtons from "../components/movie_details_screen/ActionButtons";
 import EpisodeRow from "../components/movie_details_screen/EpisodeRow";
 import InfoSectionTwo from "../components/movie_details_screen/InfoSectionTwo";
+import ModalPicker from "../components/movie_details_screen/ModalPicker";
 
 const MovieDetailsScreen = ({ navigation, route }) => {
   let movieDetails = movies["movie1"];
@@ -28,17 +25,15 @@ const MovieDetailsScreen = ({ navigation, route }) => {
     return { key: season.id, value: season.name };
   });
 
-  // let seasons = movieDetails.seasons.items.map((season) => {
-  //   {
-  //     (key = season.id), (value = season.name);
-  //   }
-  // });
   const [selectedSeason, setSelectedSeason] = useState(0);
+  const [selectedEpisode, setSelectedEpisode] = useState(0);
   const [isModalVisible, setisModalVisible] = useState(false);
+  const [status, setStatus] = useState({});
+  const video = useRef(null);
+
   const changeisModalVisible = (bool) => {
     setisModalVisible(bool);
   };
-
   const changeSeason = (season) => {
     setSelectedSeason(season);
     setisModalVisible(false);
@@ -50,7 +45,19 @@ const MovieDetailsScreen = ({ navigation, route }) => {
         <Button title="Back" onPress={() => navigation.pop()} />
       </View>
 
-      <Image source={movieDetails.poster} style={styles.poster} />
+      <Video
+        ref={video}
+        style={styles.video}
+        source={{
+          uri: movieDetails.seasons.items[selectedSeason].episodes.items[
+            selectedEpisode
+          ].video,
+        }}
+        useNativeControls
+        resizeMode={ResizeMode.CONTAIN}
+        isLooping
+        onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+      />
 
       <ScrollView style={{ flex: 1 }}>
         {/* Movie Title */}
@@ -60,15 +67,13 @@ const MovieDetailsScreen = ({ navigation, route }) => {
         <InfoSectionOne movieDetails={movieDetails} />
 
         {/* Play and Download Buttons */}
-        <ActionButtons />
+        <ActionButtons status={status} video={video} />
 
         {/* Movie Info Section 2 */}
         <InfoSectionTwo movieDetails={movieDetails} />
 
         {/* Reaction Buttons */}
-        <TouchableOpacity onPress={() => console.log(isModalVisible)}>
-          <ReactionButtons />
-        </TouchableOpacity>
+        <ReactionButtons />
 
         {/* Season Picker */}
         <TouchableOpacity onPress={() => setisModalVisible(true)}>
@@ -82,51 +87,23 @@ const MovieDetailsScreen = ({ navigation, route }) => {
 
         {/* Episode List */}
         {movieDetails.seasons.items[selectedSeason].episodes.items.map(
-          (item) => (
+          (item, index) => (
             <View key={item.id} style={{ flex: 1, height: 160 }}>
-              <EpisodeRow episodeDetails={item} />
+              <EpisodeRow
+                episodeDetails={item}
+                setSelectedEpisode={setSelectedEpisode}
+                index={index}
+              />
             </View>
           )
         )}
       </ScrollView>
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={isModalVisible}
-        onRequestClose={() => changeisModalVisible(false)}
-      >
-        <TouchableOpacity
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <View
-            style={{
-              backgroundColor: "white",
-              borderRadius: 10,
-              alignItems: "center",
-              justifyContent: "center",
-              alignContent: "center",
-              width: "80%",
-              height: "20%",
-            }}
-          >
-            <ScrollView style={{ flex: 1 }}>
-              {seasons.map((item) => (
-                <TouchableOpacity
-                  key={item.key}
-                  onPress={() => changeSeason(item.key)}
-                >
-                  <Text
-                    style={{ margin: 16, fontSize: 24, fontWeight: "bold" }}
-                  >
-                    {item.value}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-            <Button title="Back" onPress={() => changeisModalVisible(false)} />
-          </View>
-        </TouchableOpacity>
-      </Modal>
+      <ModalPicker
+        seasons={seasons}
+        changeSeason={changeSeason}
+        changeisModalVisible={changeisModalVisible}
+        isModalVisible={isModalVisible}
+      />
     </SafeAreaView>
   );
 };
@@ -154,6 +131,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 8,
+  },
+  video: {
+    alignSelf: "center",
+    width: "100%",
+    height: "30%",
   },
 });
 

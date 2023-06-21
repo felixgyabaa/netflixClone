@@ -2,17 +2,26 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const ActionButtons = () => {
+const ActionButtons = ({ status, video }) => {
   return (
     <>
-      <TouchableOpacity style={styles.playButton}>
+      <TouchableOpacity
+        style={styles.playButton}
+        onPress={() =>
+          status.isPlaying
+            ? video.current.pauseAsync()
+            : video.current.playAsync()
+        }
+      >
         <MaterialIcons
           style={{ marginHorizontal: 8 }}
-          name="play-arrow"
+          name={status.isPlaying ? "pause" : "play-arrow"}
           size={24}
           color="black"
         />
-        <Text style={{ fontWeight: "bold" }}>Play</Text>
+        <Text style={{ fontWeight: "bold" }}>
+          {status.isPlaying ? "Pause" : "Play"}
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.downloadButton}>
         <MaterialIcons

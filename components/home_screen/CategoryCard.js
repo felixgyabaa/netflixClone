@@ -17,7 +17,7 @@ const HomeCategory = ({ categoryData, nav }) => {
         data={categoryData.movies}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => nav.navigate("MovieDetails", { item })}
+            onPress={() => nav.navigate("MovieDetails", { itemID: item.id })}
           >
             <Image style={styles.image} source={item.poster} />
           </TouchableOpacity>
